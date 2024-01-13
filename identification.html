@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: #ffffff; /* White background */
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        header {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 20px;
+            background-image :url("https://qph.cf2.quoracdn.net/main-qimg-d8df3913e660a095987abc6434bb279a-pjlq");
+            background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: 100% 50%;
+    padding: 200px 200px;
+        }
+
+        footer {
+            background-color: #2980b9; /* Darker blue for footer */
+            color: #fff;
+            padding: 15px 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        h1 {
+            margin: 0;
+            color: black;
+            font-size: 45px;
+        }
+
+        p {
+            margin: 10px 0;
+            text-align: justify;
+            color: #333; /* Dark text for content */
+        }
+
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #63c0eb; /* Darker blue for button */
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #54c0eb; /* Slightly darker shade on hover */
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            color: #333; /* Dark text for result */
+            background-color: #ecf0f1; /* Light grey background for result */
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        /* About Section */
+        #about-container {
+            background-color: #fff; /* White background */
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        #about {
+            padding: 20px;
+        }
+
+        #about h2 {
+            color: black; /* Darker blue for header */
+        }
+
+        #blog {
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        #blog h2 {
+            margin-bottom: 20px;
+        }
+
+        #blog ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #blog li {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        #blog li:hover {
+            transform: translateY(-5px);
+        }
+
+        #blog li strong {
+            display: block;
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .explore-btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .explore-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <title>Kanitamil Accent Identifier</title>
+</head>
+
+<body>
+    <header>
+        <h1>Kanitamil Accent Identifier</h1>
+    </header>
+
+    <div id="about-container" class="container">
+        <section id="about">
+            <h2>About</h2>
+            <p>
+                Welcome to the Kanitamil Accent Identifier! This tool helps identify Tamil accents from audio input,
+                providing information about regional variations such as Madurai, Thanjavur, and more.
+            </p>
+        </section>
+    </div>
+
+    <div class="container" id="accent-identifier">
+        <h2>Procedure to Identify the Accent</h2>
+        <p>Follow these steps to identify the accent:</p>
+        <p><strong>Step 1:</strong> Upload Tamil audio file</p>
+        <input type="file" id="audioInput" accept=".mp3, .wav, .flac">
+        <p><strong>Step 2:</strong> Click the "Identify Accent" button</p>
+        <button onclick="identifyAccent()">Identify Accent</button>
+        <div id="result"></div>
+        <audio id="audioPlayer" controls style="display: none;"></audio> <!-- Added audio player -->
+    </div>
+
+    <section id="blog" class="container">
+        <h2>Latest Blog Posts</h2>
+        <ul>
+            <li>
+                <strong>January 1, 2024</strong> - Launched Tamil Text Summarizer website.
+                <a href="blog.html" class="explore-btn">Explore</a>
+            </li>
+            <li>
+                <strong>January 15, 2024</strong> - Added a new feature for improved summarization accuracy.
+                <a href="blog.html" class="explore-btn">Explore</a>
+            </li>
+            <!-- Add new blog entries here -->
+        </ul>
+    </section>
+
+    <footer>
+        <p style="margin: 0;">&copy; 2024 Kanitamil Accent Identifier. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function identifyAccent() {
+            var audioInput = document.getElementById("audioInput");
+
+            if (audioInput.files.length > 0) {
+                var audioFile = audioInput.files[0];
+                var formData = new FormData();
+                formData.append("audioFile", audioFile);
+
+                fetch('/identify-accent', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("result").innerText = "The identified accent is: " + data.accent;
+
+                    // Update audio player source and enable controls
+                    var audioPlayer = document.getElementById("audioPlayer");
+                    audioPlayer.src = data.audioUrl;
+                    audioPlayer.style.display = "block";
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            } else {
+                alert("Please select an audio file.");
+            }
+        }
+    </script>
+</body>
+
+</html>

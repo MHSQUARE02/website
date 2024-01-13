@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tamil Translator</title>
+    <style>
+        body {
+            background-image: url('https://i.pinimg.com/originals/8c/46/47/8c4647575f25bbef1ad70ff1ed558d7d.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100% 100%;
+            padding: 200px 200px;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+        }
+
+        #container {
+    max-width: 600px;
+    margin: 50px 20px 50px auto; /* Adjust the right margin to move the container to the right */
+    padding: 20px;
+    background: rgba(238, 211, 59, 0.945);
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        #translateBtn {
+            background-color: #2E8B57;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #translateBtn:hover {
+            background-color: #228B22;
+        }
+
+        #translationResult {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+
+        audio {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1 style="color:black;" style="font-family:verdana;">KANITAMIL TRANSLATOR</h1>
+        <p>Welcome to kanitamil translator! This Tool helps to translate any language to Tamil.</p>
+        
+        <label for="textInput">Text Input:</label>
+        <input type="text" id="textInput" placeholder="Enter text in any language" />
+
+        <label for="audioInput">Audio Input:</label>
+        <input type="file" accept="audio/*" id="audioInput" />
+
+        <button id="translateBtn" onclick="translate()">Translate</button>
+
+        <div id="translationResult"></div>
+        <audio id="audioResult" controls></audio>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        function translate() {
+            var inputText = document.getElementById('textInput').value;
+            var audioInput = document.getElementById('audioInput').files[0];
+
+            var formData = new FormData();
+            formData.append('text', inputText);
+            formData.append('audio', audioInput);
+
+            $.ajax({
+                type: "POST",
+                url: "/translate",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    document.getElementById('translationResult').innerText = "Translated Text: " + response.translated_text;
+                    
+                    // Display audio
+                    var audioResult = document.getElementById('audioResult');
+                    audioResult.src = response.audio_url;
+                    audioResult.style.display = 'block';
+                },
+                error: function(error) {
+                    console.log("Error:", error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
